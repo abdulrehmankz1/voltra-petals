@@ -20,10 +20,13 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
-// MOTION-DEV OWNS THIS STRING: the pre-paint root script (js / js-ready classes and the fallback if the motion
-// bundle never boots, as on Facet). Left empty until the motion port fills it in; any future CSP must allow it by
-// its hash.
-const rootScript = "";
+// The original script adds js-ready to the root once it runs (never with ?still), and the CSS then holds the
+// below-the-fold reveals hidden until their chapter plays them. This adds it before first paint, before the motion
+// bundle arrives, so nothing shows and then vanishes. If the bundle never reports in ("petals:motion", sent by
+// components/petals/motion/boot.ts) within 10 s, js-ready is taken off again and the content shows as without
+// JavaScript (the original does the same when its script fails); a late boot adds it back. Petals has no <noscript>
+// stylesheet, so there is no petals-nojs style to swap in. Any future CSP must allow this script by its hash.
+const rootScript = `(function(){var r=document.documentElement,ok=false;if(/[?&]still\\b/.test(location.search))return;r.classList.add('js-ready');addEventListener('petals:motion',function(){ok=true;});setTimeout(function(){if(!ok)r.classList.remove('js-ready');},10000);})();`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

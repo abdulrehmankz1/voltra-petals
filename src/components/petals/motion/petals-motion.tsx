@@ -1,5 +1,10 @@
 "use client";
 
-export function PetalsMotion(): null {
+import { useEffect } from "react";
+import { startPetalsMotion } from "./boot";
+
+// The original page script, ported 1:1 (see ./boot.ts). Boots once per mount and fully reverts on unmount.
+export function PetalsMotion() {
+  useEffect(() => startPetalsMotion(), []);
   return null;
 }

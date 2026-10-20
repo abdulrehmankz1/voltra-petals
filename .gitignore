@@ -53,3 +53,6 @@ docs/design/claims.json
 
 # visual parity screenshots (tests/visual-parity.mjs)
 /reports/visual-parity/
+
+# visual parity output
+tests/out/
